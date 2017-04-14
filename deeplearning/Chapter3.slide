@@ -6,3 +6,5 @@
 * Activation function
 
 - Why linear function is not suitable for neural network?
+- Muliti layer with linear function is equivalent to single layer.
+- Single layer perceptron is not enough for representation of complexity.
