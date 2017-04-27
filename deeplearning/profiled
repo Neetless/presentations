@@ -1,0 +1,135 @@
+Timer unit: 1e-06 s
+
+Total time: 0 s
+File: <ipython-input-2-6700f2a1669e>
+Function: __init__ at line 5
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+     5                                               def __init__(self, input_size, hidden_size, output_size, weight_init_std=0.01):
+     6                                                   self.params = {}
+     7                                                   self.params['W1'] = weight_init_std * np.random.randn(input_size, hidden_size)
+     8                                                   self.params['b1'] = np.zeros(hidden_size)
+     9                                                   
+    10                                                   self.params['W2'] = weight_init_std * np.random.randn(hidden_size, output_size)
+    11                                                   self.params['b2'] = np.zeros(output_size)
+
+Total time: 36.8997 s
+File: <ipython-input-2-6700f2a1669e>
+Function: predict at line 13
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    13                                               def predict(self, x):
+    14     79523        72126      0.9      0.2          W1, W2 = self.params['W1'], self.params['W2']
+    15     79523        58331      0.7      0.2          b1, b2 = self.params['b1'], self.params['b2']
+    16                                                   
+    17     79523     26004018    327.0     70.5          a1 = np.dot(x, W1) + b1
+    18     79523      4976213     62.6     13.5          z1 = sigmoid(a1)
+    19     79523      1453605     18.3      3.9          a2 = np.dot(z1, W2) + b2
+    20     79523      4279970     53.8     11.6          y = softmax(a2)
+    21                                                   
+    22     79523        55412      0.7      0.2          return y
+
+Total time: 38.6195 s
+File: <ipython-input-2-6700f2a1669e>
+Function: loss at line 24
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    24                                               def loss(self, x, t):
+    25     79521     36860137    463.5     95.4          y = self.predict(x)
+    26     79521      1759390     22.1      4.6          return cross_entropy_error(y, t)
+
+Total time: 0.501012 s
+File: <ipython-input-2-6700f2a1669e>
+Function: accuracy at line 28
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    28                                               def accuracy(self, x, t):
+    29         2       497335 248667.5     99.3          y = self.predict(x)
+    30         2         1848    924.0      0.4          y = np.argmax(y, axis=1)
+    31         2         1621    810.5      0.3          t = np.argmax(t, axis=1)
+    32                                                   
+    33         2          207    103.5      0.0          accuracy = np.sum(y == t) / float(x.shape[0])
+    34         2            1      0.5      0.0          return accuracy
+
+Total time: 39.1188 s
+File: <ipython-input-2-6700f2a1669e>
+Function: numerical_gradient at line 36
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    36                                               def numerical_gradient(self, x, t):
+    37         1            2      2.0      0.0          loss_W = lambda W: self.loss(x, t)
+    38         1            0      0.0      0.0          grads = {}
+    39         1            1      1.0      0.0          W1, W2 = self.params['W1'], self.params['W2']
+    40         1            1      1.0      0.0          b1, b2 = self.params['b1'], self.params['b2']
+    41                                                   
+    42         1     38569000 38569000.0     98.6          grads['W1'] = numerical_gradient(loss_W, W1)
+    43         1        50525  50525.0      0.1          grads['b1'] = numerical_gradient(loss_W, b1)
+    44         1       489942 489942.0      1.3          grads['W2'] = numerical_gradient(loss_W, W2)
+    45         1         9303   9303.0      0.0          grads['b2'] = numerical_gradient(loss_W, b2)
+    46                                                   
+    47         1            1      1.0      0.0          return grads
+
+Total time: 0 s
+File: <ipython-input-2-6700f2a1669e>
+Function: gradient at line 49
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+    49                                               def gradient(self, x, t):
+    50                                                   W1, W2 = self.params['W1'], self.params['W2']
+    51                                                   b1, b2 = self.params['b1'], self.params['b2']
+    52                                                   grads = {}
+    53                                                   
+    54                                                   batch_num = x.shape[0]
+    55                                                   
+    56                                                   # forward
+    57                                                   a1 = np.dot(x, W1) + b1
+    58                                                   z1 = sigmoid(a1)
+    59                                                   a2 = np.dot(z1, W2) + b2
+    60                                                   y = softmax(a2)
+    61                                                   
+    62                                                   # backward
+    63                                                   dy = (y - t) / batch_num
+    64                                                   grads['W2'] = np.dot(z1.T, dy)
+    65                                                   grads['b2'] = np.sum(dy, axis=0)
+    66                                                   
+    67                                                   da1 = np.dot(dy, W2.T)
+    68                                                   dz1 = sigmoid_grad(a1) * da1
+    69                                                   grads['W1'] = np.dot(x.T, dz1)
+    70                                                   grads['b1'] = np.sum(dz1, axis=0)
+    71                                           
+    72                                                   return grads
+
+Total time: 39.6246 s
+File: <ipython-input-8-ae4e92d33f03>
+Function: run at line 3
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+     3                                           def run():
+     4         2            6      3.0      0.0      for i in range(iters_num):
+     5         1          104    104.0      0.0          batch_mask = np.random.choice(train_size, batch_size)
+     6         1           97     97.0      0.0          x_batch = x_train[batch_mask]
+     7         1           44     44.0      0.0          t_batch = t_train[batch_mask]
+     8                                           
+     9         1     39118793 39118793.0     98.7          grad = network.numerical_gradient(x_batch, t_batch)
+    10                                                   #grad = network.gradient(x_batch, t_batch)
+    11                                           
+    12         5            4      0.8      0.0          for key in ('W1', 'b1', 'W2', 'b2'):
+    13         4          210     52.5      0.0              network.params[key] -= learning_rate * grad[key]
+    14                                           
+    15         1          970    970.0      0.0          loss = network.loss(x_batch, t_batch)
+    16         1            4      4.0      0.0          train_loss_list.append(loss)
+    17                                           
+    18         1           20     20.0      0.0          if i % iter_per_epoch == 0:
+    19         1       442507 442507.0      1.1              train_acc = network.accuracy(x_train, t_train)
+    20         1        61624  61624.0      0.2              test_acc = network.accuracy(x_test, t_test)
+    21         1            2      2.0      0.0              train_acc_list.append(train_acc)
+    22         1            1      1.0      0.0              test_acc_list.append(test_acc)
+    23         1          211    211.0      0.0              print("train acc, test acc | " + str(train_acc) + ", " + str(test_acc))
+
