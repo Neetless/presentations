@@ -9,8 +9,11 @@ Chapter 6 Teqniques of Deep Learning
 - Momentum
 - AdaGrad
 - Adam
-- 参考
+
+
+* reference
 .link http://postd.cc/optimizing-gradient-descent/ 勾配降下法の最適化アルゴリズムを概観する
+.iframe http://postd.cc/optimizing-gradient-descent/ 500 1000
 
 * Momentum
 - calculate negaive gradient with using previous value
