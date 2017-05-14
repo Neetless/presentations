@@ -1,0 +1,62 @@
+ゼロから作るDeep Learning
+Chapter 6 Teqniques of Deep Learning
+19 May 2017
+
+@_Neetless_
+
+* parameter update techniques
+- SGD
+- Momentum
+- AdaGrad
+- Adam
+- 参考
+.link http://postd.cc/optimizing-gradient-descent/ 勾配降下法の最適化アルゴリズムを概観する
+
+* Momentum
+- calculate negaive gradient with using previous value
+- it means a move of weights is considered as a real object, and consider momemtum of the object
+- Caffe provide Momemtum method as SGD
+.image ./img/momentum_eq.png _ _ 
+
+* AdaGrad
+- muliply inverse of absolute value of gradient with learning rate
+- if gradient is small, learning rate become smaller.
+.image ./img/adagrad.png _ _
+
+* Adam
+- combination of AdaGrad and Momemtum
+
+* weight initialization techniques
+- weight initial value shouldn't be same value.
+- investigate distributions of activation in hidden layer.
+- random(gaussian, std deviation 0.01)
+- xavier initialization for sigmoid tanh
+- he initialization for ReLU
+
+* xavier initialization
+- xavier initialization is for the linear activation function, i.e. sgmoid and tanh
+- random value with 1/sqrt(n) std deviation 
+- n is # of previous layer's nodes.
+
+* he initialization
+- he initialization is for ReLU
+- random value with sqrt(2/n) std deviation 
+- n is # of previous layer's nodes.
+
+* Batch Normalization
+- normlize output to mean 0, variance 1 scale in each affine layers
+- then scale it like ax + b
+
+* regularization
+- weight decay
+- Dropout
+
+* weight decay
+- regularization with penalty 
+- adjust W L2 norm
+
+* Dropout
+- randomly erase node
+
+* hyper parameter optimization
+- random sampling
